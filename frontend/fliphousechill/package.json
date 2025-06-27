@@ -17,6 +17,7 @@
     "vite": "^6.3.5"
   },
   "dependencies": {
+    "@fontsource/days-one": "^5.2.6",
     "@tailwindcss/vite": "^4.1.11"
   }
 }

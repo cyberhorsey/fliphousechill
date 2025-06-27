@@ -1,101 +1,68 @@
 <script>
-  import svelteLogo from './assets/svelte.svg'
-  import viteLogo from '/vite.svg'
-
-  // fetch https://chillhouse-api-zaydoupxua-uw.a.run.app/cache and store it
-  // in a variable called cache
-  let cache = [];
-  async function fetchCache() {
-    try {
-      const response = await fetch('https://chillhouse-api-zaydoupxua-uw.a.run.app/cache', {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`)
-      }
-      const data = await response.json()
-      cache = data
-      console.log('Cache fetched successfully:', cache)
-    } catch (error) {
-      console.error('Error fetching cache:', error)
-    }
-  }
-
-  fetchCache()
-  
-   // format a float as "23.5m" or "1.2b"
-  function formatCap(val) {
-    if (val >= 1e9) {
-      return (val / 1e9)
-        .toFixed(1)
-        .replace(/\.0$/, '') + 'b';
-    }
-    return (val / 1e6)
-      .toFixed(1)
-      .replace(/\.0$/, '') + 'm';
-  }
-
+  import "@fontsource/days-one";
+  import logo from "/public/fliphousechill-logo.png";
+  import guy from "/public/chillhouse-guy.png";
 </script>
 
-<main>
-  <div>
-    <a href="https://vite.dev" target="_blank" rel="noreferrer">
-      <img src={viteLogo} class="logo" alt="Vite Logo" />
-    </a>
-    <a href="https://svelte.dev" target="_blank" rel="noreferrer">
-      <img src={svelteLogo} class="logo svelte" alt="Svelte Logo" />
-    </a>
-  </div>
-  <h1 class="text-3xl font-bold text-blue-600 underline">Vite + Svelte</h1>
+<main class="min-h-screen bg-[#e3cba4] flex flex-col items-center px-4 pb-8">
+  <header class="flex flex-col items-center mt-8">
+    <div class="font-bold text-[1.5rem] mb-2 tracking-wide">
+      <span class="text-[#a05a3b]">Flip</span><span class="text-[#444]"
+        >House</span
+      ><span class="text-[#444]">Chill</span>
+    </div>
+    <img src={logo} alt="FlipHouseChill Logo" class="w-[70px] mb-2 spin-180-hover" />
+  </header>
 
+  <section class="flex items-start justify-center my-8 w-full max-w-[700px]">
+    <img src={guy} alt="Chillhouse Guy" class="w-14 h-[71px] mr-4" />
+    <div class="flex-1 text-left">
+      <h1 class="text-[1.5rem] font-bold text-[#222] leading-tight m-0">
+        Chillhouse <span class="text-[#a05a3b] font-bold">flipped</span> the
+        <span class="text-[#a05a3b] font-bold">opening weekend</span> for the Emoji
+        Movie
+      </h1>
+    </div>
+  </section>
 
-  <div class="card">
-    {#if cache.length}
-      <h2>Cache Data</h2>
-      {#each cache as entry (entry.item.label)}
-        <div class="cache-entry">
-          {#if entry.item.icon}
-            <img src={entry.item.icon} alt={entry.item.label} width="24" height="24" />
-          {/if}
-          {#if entry.item.label.toLowerCase() == "chillhouse"}
-          <strong>{entry.item.label}:</strong>
-          {:else}
-          <span>{entry.item.label}:</span>
-          {/if}
-          <span>{formatCap(entry.item.market_cap)}</span>
-        </div>
-      {/each}
-    {:else}
-      <p>Loading cache...</p>
-    {/if}
-  </div>
-
-  <p>
-    Check out <a href="https://github.com/sveltejs/kit#readme" target="_blank" rel="noreferrer">SvelteKit</a>, the official Svelte app framework powered by Vite!
-  </p>
-
-  <p class="read-the-docs">
-    Click on the Vite and Svelte logos to learn more
-  </p>
+  <section class="flex flex-col gap-4 w-full max-w-[600px]">
+    <div
+      class="flex items-center rounded-xl px-6 py-4 text-[1.1rem] font-semibold shadow-sm bg-[#f6e7c1] text-[#222] text-left"
+    >
+      <img src={guy} alt="Chillhouse Guy" class="w-9 h-[46px] mr-3" />
+      <span
+        >Chillhouse <span class="text-[#a05a3b] font-bold">flipped</span> the
+        <span class="text-[#a05a3b] font-bold">opening weekend</span> for the Emoji
+        Movie</span
+      >
+    </div>
+    <div
+      class="flex items-center rounded-xl px-6 py-4 text-[1.1rem] font-semibold shadow-sm bg-[#ede0c2] text-[#222] text-left"
+    >
+      <img src={guy} alt="Chillhouse Guy" class="w-9 h-[46px] mr-3" />
+      <span
+        >Chillhouse <span class="text-[#a05a3b] font-bold">flipped</span> the
+        <span class="text-[#a05a3b] font-bold">opening weekend</span> for the Emoji
+        Movie</span
+      >
+    </div>
+  </section>
 </main>
 
 <style>
-  .logo {
-    height: 6em;
-    padding: 1.5em;
-    will-change: filter;
-    transition: filter 300ms;
+  :global(.spin-180-hover:hover) {
+    transition: transform 0.5s cubic-bezier(0.4,0,0.2,1);
+    transform: rotate(180deg);
   }
-  .logo:hover {
-    filter: drop-shadow(0 0 2em #646cffaa);
+  :global(.spin-180-hover) {
+    transition: transform 0.5s cubic-bezier(0.4,0,0.2,1);
   }
-  .logo.svelte:hover {
-    filter: drop-shadow(0 0 2em #ff3e00aa);
+  :global(body) {
+    background-color: #e3cba4;
   }
-  .read-the-docs {
-    color: #888;
+  @media (max-width: 600px) {
+    h1 {
+      font-size: 1.4rem !important;
+    }
   }
 </style>
