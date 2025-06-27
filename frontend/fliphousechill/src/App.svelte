@@ -2,6 +2,41 @@
   import "@fontsource/days-one";
   import logo from "/public/fliphousechill-logo.png";
   import guy from "/public/chillhouse-guy.png";
+
+  let cache = [];
+  let loading = true;
+  async function fetchCache() {
+    try {
+      const response = await fetch('https://chillhouse-api-zaydoupxua-uw.a.run.app/cache', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      cache = data;
+    } catch (error) {
+      console.error('Error fetching cache:', error);
+    } finally {
+      loading = false;
+    }
+  }
+
+  fetchCache();
+
+  function formatCap(val) {
+    if (val >= 1e9) {
+      return (val / 1e9)
+        .toFixed(1)
+        .replace(/\.0$/, '') + 'b';
+    }
+    return (val / 1e6)
+      .toFixed(1)
+      .replace(/\.0$/, '') + 'm';
+  }
 </script>
 
 <main class="min-h-screen bg-[#e3cba4] flex flex-col items-center px-4 pb-8">
@@ -14,39 +49,55 @@
     <img src={logo} alt="FlipHouseChill Logo" class="w-[70px] mb-2 spin-180-hover" />
   </header>
 
-  <section class="flex items-start justify-center my-8 w-full max-w-[700px]">
-    <img src={guy} alt="Chillhouse Guy" class="w-14 h-[71px] mr-4" />
-    <div class="flex-1 text-left">
-      <h1 class="text-[1.5rem] font-bold text-[#222] leading-tight m-0">
-        Chillhouse <span class="text-[#a05a3b] font-bold">flipped</span> the
-        <span class="text-[#a05a3b] font-bold">opening weekend</span> for the Emoji
-        Movie
-      </h1>
-    </div>
-  </section>
+  {#if loading}
+    <section class="flex items-start justify-center my-8 w-full max-w-[700px]">
+      <img src={guy} alt="Chillhouse Guy" class="w-14 h-[71px] mr-4" />
+      <div class="flex-1 text-left">
+        <h1 class="text-[1.5rem] font-bold text-[#222] leading-tight m-0">
+          Loading latest entry...
+        </h1>
+      </div>
+    </section>
+    <section class="flex flex-col gap-4 w-full max-w-[600px]">
+      <div class="flex items-center rounded-xl px-6 py-4 text-[1.1rem] font-semibold shadow-sm bg-[#f6e7c1] text-[#222] text-left">
+        <img src={guy} alt="Chillhouse Guy" class="w-9 h-[46px] mr-3" />
+        <span>Loading entries...</span>
+      </div>
+    </section>
+  {:else if cache.length}
+    <!-- Latest entry as headline -->
+    <section class="flex items-start justify-center my-8 w-full max-w-[700px]">
+      <img src={cache[0].item.icon || guy} alt={cache[0].item.label} class="w-14 h-[71px] mr-4" />
+      <div class="flex-1 text-left">
+        <h1 class="text-[1.5rem] font-bold text-[#222] leading-tight m-0">
+          {cache[0].item.label} <span class="text-[#a05a3b] font-bold">market cap</span> is <span class="text-[#a05a3b] font-bold">{formatCap(cache[0].item.market_cap)}</span>
+        </h1>
+      </div>
+    </section>
 
-  <section class="flex flex-col gap-4 w-full max-w-[600px]">
-    <div
-      class="flex items-center rounded-xl px-6 py-4 text-[1.1rem] font-semibold shadow-sm bg-[#f6e7c1] text-[#222] text-left"
-    >
-      <img src={guy} alt="Chillhouse Guy" class="w-9 h-[46px] mr-3" />
-      <span
-        >Chillhouse <span class="text-[#a05a3b] font-bold">flipped</span> the
-        <span class="text-[#a05a3b] font-bold">opening weekend</span> for the Emoji
-        Movie</span
-      >
-    </div>
-    <div
-      class="flex items-center rounded-xl px-6 py-4 text-[1.1rem] font-semibold shadow-sm bg-[#ede0c2] text-[#222] text-left"
-    >
-      <img src={guy} alt="Chillhouse Guy" class="w-9 h-[46px] mr-3" />
-      <span
-        >Chillhouse <span class="text-[#a05a3b] font-bold">flipped</span> the
-        <span class="text-[#a05a3b] font-bold">opening weekend</span> for the Emoji
-        Movie</span
-      >
-    </div>
-  </section>
+    <!-- The rest as cards -->
+    <section class="flex flex-col gap-4 w-full max-w-[600px]">
+      {#each cache.slice(1) as entry}
+        <div
+          class="flex items-center rounded-xl px-6 py-4 text-[1.1rem] font-semibold shadow-sm bg-[#f6e7c1] text-[#222] text-left"
+        >
+          <img src={entry.item.icon || guy} alt={entry.item.label} class="w-9 h-[46px] mr-3" />
+          <span>
+            {entry.item.label}: <span class="text-[#a05a3b] font-bold">{formatCap(entry.item.market_cap)}</span>
+          </span>
+        </div>
+      {/each}
+    </section>
+  {:else}
+    <section class="flex items-start justify-center my-8 w-full max-w-[700px]">
+      <img src={guy} alt="Chillhouse Guy" class="w-14 h-[71px] mr-4" />
+      <div class="flex-1 text-left">
+        <h1 class="text-[1.5rem] font-bold text-[#222] leading-tight m-0">
+          No entries found.
+        </h1>
+      </div>
+    </section>
+  {/if}
 </main>
 
 <style>
