@@ -13,8 +13,8 @@ type CacheItem struct {
 }
 
 type Cache struct {
-	items map[string]CacheItem `json:"items"`
-	mutex sync.Mutex           `json:"-"`
+	items map[string]CacheItem
+	mutex sync.Mutex
 }
 
 func New() *Cache {
