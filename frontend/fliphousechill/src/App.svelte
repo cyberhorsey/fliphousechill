@@ -79,7 +79,12 @@
     <section class="flex flex-col gap-4 w-full max-w-[600px]">
       {#each cache.slice(1) as entry}
         <div
-          class="flex items-center rounded-xl px-6 py-4 text-[1.1rem] font-semibold shadow-sm bg-[#f6e7c1] text-[#222] text-left"
+          class="flex items-center rounded-xl px-6 py-4 text-[1.1rem] font-semibold shadow-sm text-[#222] text-left"
+          class:bg-[#decca7]={entry.item.label === 'Chillhouse'}
+          class:border={entry.item.label === 'Chillhouse'}
+          class:border-[#a05a3b]={entry.item.label === 'Chillhouse'}
+          class:font-bold={entry.item.label === 'Chillhouse'}
+          class:bg-[#f6e7c1]={entry.item.label !== 'Chillhouse'}
         >
           <img src={entry.item.icon || guy} alt={entry.item.label} class="w-9 h-[46px] mr-3" />
           <span>
