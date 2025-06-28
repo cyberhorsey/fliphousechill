@@ -3,7 +3,7 @@
   import logo from "/public/fliphousechill-logo.png";
   import guy from "/public/chillhouse-guy.png";
   import guyNotFlipped from "/public/chillhouse-guy-not-flipped.png";
-  import { onMount } from 'svelte';
+  import { onMount, tick } from 'svelte';
   import { register } from 'swiper/element/bundle';
   import 'swiper/css';
   import 'swiper/css/effect-cards';
@@ -48,27 +48,46 @@
 
   fetchCache();
 
-  function formatCap(val) {
-    if (val >= 1e9) {
-      return (val / 1e9)
-        .toFixed(1)
-        .replace(/\.0$/, '') + 'b';
-    }
+   // whenever loading goes false, scroll to our ChillHouse card
+ $: if (!loading) {
+   // wait for DOM to update
+   tick().then(() => {
+     const el = document.querySelector('[data-lower="chillhouse"]');
+     if (el) {
+       el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+     }
+   });
+ }
+
+function formatCap(val) {
+  if (val >= 1e9) {
+    return (val / 1e9)
+      .toFixed(1)
+      .replace(/\.0$/, '') + 'b';
+  }
+  if (val >= 1e6) {
     return (val / 1e6)
       .toFixed(1)
       .replace(/\.0$/, '') + 'm';
   }
-
-  function highlightText(text) {
-    // Simple demo: highlight 'flipped' and 'opening weekend' in brown
-    return text
-      .replace(/(flipped)/gi, '<span class="highlight">$1</span>')
-      .replace(/(opening weekend)/gi, '<span class="highlight">$1</span>');
+  if (val >= 1e3) {
+    return (val / 1e3)
+      .toFixed(1)
+      .replace(/\.0$/, '') + 'k';
   }
+  return val.toString();
+}
 
-  onMount(() => {
-    register();
-  });
+function highlightText(text) {
+  // Simple demo: highlight 'flipped' and 'opening weekend' in brown
+  return text
+    .replace(/(flipped)/gi, '<span class="highlight">$1</span>')
+    .replace(/(opening weekend)/gi, '<span class="highlight">$1</span>');
+}
+
+onMount(() => {
+  register();
+});
 </script>
 
 {#if view === 'chill'}

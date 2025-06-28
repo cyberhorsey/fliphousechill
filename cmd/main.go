@@ -92,7 +92,7 @@ func main() {
 	http.HandleFunc("/cache", withCORS(func(w http.ResponseWriter, r *http.Request) {
 		// send cache as JSON
 		w.Header().Set("Content-Type", "application/json")
-		items := defaultCache.All()
+		items := defaultCache.AllSortedByMarketCap()
 		if err := json.NewEncoder(w).Encode(items); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 		}
