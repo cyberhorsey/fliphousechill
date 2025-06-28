@@ -10,6 +10,7 @@
   let etcCap = null;
   let chillhouseToEtcX = null;
   let view = 'list'; // 'list' or 'chill'
+  let chillhouseEntry = null;
 
   async function fetchCache() {
     try {
@@ -25,7 +26,7 @@
       const data = await response.json();
       cache = data;
       // Find Chillhouse and Ethereum Classic entries
-      const chillhouseEntry = cache.find(e => e.item.label && e.item.label.toLowerCase().includes('chillhouse'));
+      chillhouseEntry = cache.find(e => e.item.label && e.item.label.toLowerCase().includes('chillhouse'));
       const etcEntry = cache.find(e => e.item.label && e.item.label.toLowerCase().includes('ethereum classic'));
       chillhouseCap = chillhouseEntry ? chillhouseEntry.item.market_cap : null;
       etcCap = etcEntry ? etcEntry.item.market_cap : null;
@@ -52,13 +53,29 @@
 </script>
 
 <main class="min-h-screen bg-[#e3cba4] flex flex-col items-center px-4 pb-8">
-  <header class="flex flex-col items-center mt-8">
-    <div class="font-bold text-[1.5rem] mb-2 tracking-wide">
-      <span class="text-[#a05a3b]">Flip</span><span class="text-[#444]"
-        >House</span
-      ><span class="text-[#444]">Chill</span>
+  <header class="flex flex-col items-center mt-8 mb-2">
+    <div class="flex flex-row items-center justify-center mb-2">
+      <img src={guyNotFlipped} alt="Chillhouse Guy Not Flipped" class="mr-1" style="max-width: 24px;" />
+      <img src={guy} alt="Chillhouse Guy" class="ml-1" style="max-width: 24px;" />
+      <span class="font-bold text-[2rem] tracking-wide flex flex-row items-center ml-3">
+        <span class="text-[#a05a3b]">Flip</span><span class="text-[#222]">HouseChill</span>
+      </span>
     </div>
-    <img src={logo} alt="FlipHouseChill Logo" class="w-[70px] mb-2 spin-180-hover" />
+    {#if chillhouseCap}
+      <div class="flex flex-row items-center justify-center gap-4 text-sm font-medium text-[#444] mt-1">
+        <span>MC: <span class="text-[#222]">{formatCap(chillhouseCap).toUpperCase()}</span></span>
+        <span>Price: <span class="text-[#222]">${chillhouseEntry && chillhouseEntry.item.price ? chillhouseEntry.item.price : '0.016'}</span></span>
+        <a
+          href="https://dexscreener.com/solana/35tqqmeirwebk6fr5qipwastuaavo32vjnuljpxvsxuk"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="underline decoration-underline font-bold"
+          style="color: #222; text-decoration: underline;"
+        >
+          Dexscreener
+        </a>
+      </div>
+    {/if}
   </header>
 
   <!-- Tab Toggle UI -->
