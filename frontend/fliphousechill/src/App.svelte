@@ -16,6 +16,9 @@
   let chillhouseToEtcX = null;
   let view = 'list'; // 'list' or 'chill'
   let chillhouseEntry = null;
+  let chillAudio;
+  let muted = false;
+  $: if (chillAudio) chillAudio.muted = muted;
 
   async function fetchCache() {
     try {
@@ -67,6 +70,26 @@
     register();
   });
 </script>
+
+{#if view === 'chill'}
+  <div class="gradient-blob top-left"></div>
+  <div class="gradient-blob top-right"></div>
+  <div class="gradient-blob bottom-left"></div>
+  <div class="gradient-blob bottom-right"></div>
+  <audio src="/chillhouse-beats.mp3" autoplay loop style="display:none" bind:this={chillAudio} {muted} />
+  <button
+    class="fixed sound-button top-6 right-6 z-20 bg-white border border-[#a05a3b] rounded-xl shadow-md p-2 flex items-center justify-center transition hover:scale-110 outline-none focus:outline-none focus:ring-0 focus:shadow-none"
+    on:click={() => muted = !muted}
+    aria-label={muted ? 'Unmute music' : 'Mute music'}
+    style="width: 54px; height: 54px; outline: none; box-shadow: none;"
+  >
+    {#if muted}
+      <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="#a05a3b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="1" y1="1" x2="23" y2="23"></line><path d="M9 9v3a3 3 0 0 0 5.12 2.12M15 9.34V4a3 3 0 0 0-5.94-.6"></path><path d="M17 16.95A7 7 0 0 1 5 12v-2m14 0v2a7 7 0 0 1-.11 1.23"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg>
+    {:else}
+      <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="#a05a3b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg>
+    {/if}
+  </button>
+{/if}
 
 <main class="min-h-screen bg-[#e3cba4] flex flex-col items-center px-4 pb-8">
   <header class="flex flex-col items-center mt-8 mb-2">
@@ -207,9 +230,84 @@
   :global(body) {
     background-color: #e3cba4;
   }
+  .gradient-blob {
+    position: fixed;
+    width: 350px;
+    height: 350px;
+    border-radius: 34.4375rem;
+    opacity: 0.38;
+    filter: blur(46px);
+    z-index: 0;
+    pointer-events: none;
+    animation: blob-move 11s ease-in-out infinite alternate;
+    transition: opacity 0.3s;
+  }
+  .top-left {
+    top: -180px;
+    left: -180px;
+    background: linear-gradient(153deg, #90462F 16.98%, rgba(223, 206, 169, 0.15) 98.14%);
+    animation-delay: 0s;
+  }
+  .top-right {
+    top: -180px;
+    right: -180px;
+    background: linear-gradient(153deg, #61902F 16.98%, rgba(223, 206, 169, 0.15) 98.14%);
+    animation-delay: 4s;
+  }
+  .bottom-left {
+    bottom: -180px;
+    left: -180px;
+    background: linear-gradient(153deg, #2F908E 16.98%, rgba(223, 206, 169, 0.15) 98.14%);
+    animation-delay: 8s;
+  }
+  .bottom-right {
+    bottom: -180px;
+    right: -180px;
+    background: linear-gradient(153deg, #902F51 16.98%, rgba(223, 206, 169, 0.15) 98.14%);
+    animation-delay: 12s;
+  }
+  @keyframes blob-move {
+    0% {
+      transform: scale(1) translate(0, 0);
+    }
+    50% {
+      transform: scale(1.18) translate(80px, 60px);
+    }
+    100% {
+      transform: scale(1) translate(0, 0);
+    }
+  }
+  .sound-button {
+    background-color: #fff;
+    outline: none;
+    box-shadow: none;
+  }
+
+  @media (max-width: 900px) {
+    .gradient-blob {
+      width: 200px;
+      height: 200px;
+    }
+    .top-left, .top-right, .bottom-left, .bottom-right {
+      top: -100px !important;
+      bottom: -100px !important;
+      left: -100px !important;
+      right: -100px !important;
+    }
+  }
   @media (max-width: 600px) {
     h1 {
       font-size: 1.4rem !important;
+    }
+    .gradient-blob {
+      width: 120px;
+      height: 120px;
+    }
+    .top-left, .top-right, .bottom-left, .bottom-right {
+      top: -50px !important;
+      bottom: -50px !important;
+      left: -50px !important;
+      right: -50px !important;
     }
   }
   .swiper-container {
