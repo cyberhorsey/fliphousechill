@@ -97,7 +97,7 @@ onMount(() => {
   <div class="gradient-blob bottom-right"></div>
   <audio src="/chillhouse-beats.mp3" autoplay loop style="display:none" bind:this={chillAudio} {muted} />
   <button
-    class="fixed sound-button top-6 right-6 z-20 bg-white border border-[#a05a3b] rounded-xl shadow-md p-2 flex items-center justify-center transition hover:scale-110 outline-none focus:outline-none focus:ring-0 focus:shadow-none"
+    class="fixed sound-button bottom-6 right-6 z-20 bg-white border border-[#a05a3b] rounded-xl shadow-md p-2 flex items-center justify-center transition hover:scale-110 outline-none focus:outline-none focus:ring-0 focus:shadow-none"
     on:click={() => muted = !muted}
     aria-label={muted ? 'Unmute music' : 'Mute music'}
     style="width: 54px; height: 54px; outline: none; box-shadow: none;"
@@ -110,9 +110,9 @@ onMount(() => {
   </button>
 {/if}
 
-<main class="min-h-screen bg-[#e3cba4] flex flex-col items-center px-4 pb-8">
-  <header class="flex flex-col items-center mt-8 mb-2">
-    <div class="flex flex-row items-center justify-center mb-2">
+<main class="min-h-screen bg-[#e3cba4] flex flex-col items-center px-2 sm:px-4 pb-8 w-full overflow-x-hidden">
+  <header class="flex flex-col items-center mt-8 mb-2 w-full max-w-md sm:max-w-2xl">
+    <div class="flex flex-row items-center justify-center mb-2 w-full">
       <img src={guyNotFlipped} alt="Chillhouse Guy Not Flipped" class="mr-1" style="max-width: 24px;" />
       <img src={guy} alt="Chillhouse Guy" class="ml-1" style="max-width: 24px;" />
       <span class="font-bold text-[2rem] tracking-wide flex flex-row items-center ml-3">
@@ -120,7 +120,7 @@ onMount(() => {
       </span>
     </div>
     {#if chillhouseCap}
-      <div class="flex flex-row items-center justify-center gap-4 text-sm font-medium text-[#444] mt-1">
+      <div class="flex flex-row flex-wrap items-center justify-center gap-2 sm:gap-4 text-sm font-medium text-[#444] mt-1 w-full">
         <span>MC: <span class="text-[#222]">{formatCap(chillhouseCap).toUpperCase()}</span></span>
         <span>Price: <span class="text-[#222]">${chillhouseEntry && chillhouseEntry.item.price ? chillhouseEntry.item.price : '0.016'}</span></span>
         <a
@@ -137,17 +137,17 @@ onMount(() => {
   </header>
 
   <!-- Tab Toggle UI -->
-  <div class="flex items-center justify-center my-6">
-    <div class="flex rounded-full border border-[#8a4c2b] bg-[#e3cba4] overflow-hidden shadow-sm" style="padding: 0.25rem 0.5rem;">
+  <div class="flex items-center justify-center my-6 w-full max-w-xs sm:max-w-md">
+    <div class="flex rounded-full border border-[#8a4c2b] bg-[#e3cba4] overflow-hidden shadow-sm w-full" style="padding: 0.25rem 0.5rem;">
       <button
-        class="px-10 py-3 font-bold text-[1.25rem] transition-colors duration-200"
+        class="flex-1 px-2 sm:px-10 py-3 font-bold text-[1.1rem] sm:text-[1.25rem] transition-colors duration-200 min-w-0"
         style="border-radius: 9999px; outline: none; box-shadow: none; border: none; background: {view === 'list' ? '#c7ad8e' : 'transparent'}; color: #111;"
         on:click={() => view = 'list'}
       >
         List View
       </button>
       <button
-        class="px-10 py-3 font-bold text-[1.25rem] transition-colors duration-200"
+        class="flex-1 px-2 sm:px-10 py-3 font-bold text-[1.1rem] sm:text-[1.25rem] transition-colors duration-200 min-w-0"
         style="border-radius: 9999px; outline: none; box-shadow: none; border: none; background: {view === 'chill' ? '#c7ad8e' : 'transparent'}; color: #111;"
         on:click={() => view = 'chill'}
       >
@@ -158,30 +158,30 @@ onMount(() => {
 
   {#if view === 'list'}
     {#if loading}
-      <section class="flex items-start justify-center my-8 w-full max-w-[700px]">
+      <section class="flex items-start justify-center my-8 w-full max-w-md sm:max-w-[700px]">
         <img src={guy} alt="Chillhouse Guy" class="w-14 h-[71px] mr-4" />
         <div class="flex-1 text-left">
-          <h1 class="text-[1.5rem] font-bold text-[#222] leading-tight m-0">
+          <h1 class="text-[1.2rem] sm:text-[1.5rem] font-bold text-[#222] leading-tight m-0">
             Loading latest entry...
           </h1>
         </div>
       </section>
-      <section class="flex flex-col gap-4 w-full max-w-[600px]">
-        <div class="flex items-center rounded-xl px-6 py-4 text-[1.1rem] font-semibold shadow-sm bg-[#f6e7c1] text-[#222] text-left">
+      <section class="flex flex-col gap-4 w-full max-w-sm sm:max-w-[600px]">
+        <div class="flex items-center rounded-xl px-4 sm:px-6 py-4 text-[1rem] sm:text-[1.1rem] font-semibold shadow-sm bg-[#f6e7c1] text-[#222] text-left">
           <img src={guy} alt="Chillhouse Guy" class="w-9 h-[46px] mr-3" />
           <span>Loading entries...</span>
         </div>
       </section>
     {:else if cache.length}
       <!-- Latest entry as headline -->
-      <section class="flex items-start justify-center my-8 w-full max-w-[700px]">
+      <section class="flex items-start justify-center my-8 w-full max-w-md sm:max-w-[700px]">
         <img src={cache[0].item.icon || guy} alt={cache[0].item.label} class="mr-1" style="max-width: 60px;" />
         <div class="flex-1 text-left">
-          <h2 class="text-[1.5rem] font-bold text-[#222] leading-tight m-0">
+          <h2 class="text-[1.2rem] sm:text-[1.5rem] font-bold text-[#222] leading-tight m-0">
             {cache[0].item.label} <span class="text-[#a05a3b] font-bold">market cap</span> is <span class="text-[#a05a3b] font-bold">{formatCap(cache[0].item.market_cap)}</span>
           </h2>
           {#if chillhouseToEtcX}
-            <div class="mt-2 text-[1.1rem] text-[#444]">
+            <div class="mt-2 text-[1rem] sm:text-[1.1rem] text-[#444]">
               Chillhouse needs <span class="font-bold text-[#a05a3b]">{chillhouseToEtcX.toFixed(2)}x</span> to flip Ethereum Classic market cap.
             </div>
           {/if}
@@ -189,10 +189,10 @@ onMount(() => {
       </section>
 
       <!-- The rest as cards -->
-      <section class="flex flex-col gap-4 w-full max-w-[600px]">
+      <section class="flex flex-col gap-4 w-full max-w-sm sm:max-w-[600px]">
         {#each cache.slice(1) as entry}
           <div
-            class="flex rounded-xl px-6 py-4 text-[1.1rem] font-semibold shadow-sm text-[#222] text-left items-center"
+            class="flex rounded-xl px-4 sm:px-6 py-4 text-[1rem] sm:text-[1.1rem] font-semibold shadow-sm text-[#222] text-left items-center overflow-x-auto"
             class:bg-[#decca7]={entry.item.label === 'Chillhouse'}
             class:border={entry.item.label === 'Chillhouse'}
             class:border-[#a05a3b]={entry.item.label === 'Chillhouse'}
@@ -200,12 +200,12 @@ onMount(() => {
             class:bg-[#f6e7c1]={entry.item.label !== 'Chillhouse'}
           >
             <img src={chillhouseCap && entry.item.market_cap > chillhouseCap ? guyNotFlipped : (entry.item.icon || guy)} alt={entry.item.label} class="w-9 h-[46px] mr-3 flex-shrink-0 self-center" />
-            <div class="flex flex-col justify-center">
-              <span>
+            <div class="flex flex-col justify-center min-w-0">
+              <span class="truncate">
                 {entry.item.label}: <span class="text-[#a05a3b] font-bold">{formatCap(entry.item.market_cap)}</span>
               </span>
               {#if chillhouseCap && entry.item.market_cap > chillhouseCap}
-                <div class="mt-1 text-[1rem] font-normal">
+                <div class="mt-1 text-[0.95rem] sm:text-[1rem] font-normal">
                   <span class="text-[#444]">ChillHouse is</span> <span class="text-[#a05a3b] font-bold">{(entry.item.market_cap / chillhouseCap).toFixed(2)}x</span> <span class="text-[#444]">away</span>
                 </div>
               {/if}
@@ -214,10 +214,10 @@ onMount(() => {
         {/each}
       </section>
     {:else}
-      <section class="flex items-start justify-center my-8 w-full max-w-[700px]">
+      <section class="flex items-start justify-center my-8 w-full max-w-md sm:max-w-[700px]">
         <img src={guy} alt="Chillhouse Guy" class="w-14 h-[71px] mr-4" />
         <div class="flex-1 text-left">
-          <h1 class="text-[1.5rem] font-bold text-[#222] leading-tight m-0">
+          <h1 class="text-[1.2rem] sm:text-[1.5rem] font-bold text-[#222] leading-tight m-0">
             No entries found.
           </h1>
         </div>
@@ -225,7 +225,7 @@ onMount(() => {
     {/if}
   {:else}
     <!-- Chill View with Swiper -->
-    <section class="flex flex-col items-center justify-center w-full max-w-[700px] my-4">
+    <section class="flex flex-col items-center justify-center w-full max-w-xs sm:max-w-[700px] my-4">
     
       {#if !loading && cache.length}
         <ChillView {cache} {chillhouseCap} {formatCap} />
