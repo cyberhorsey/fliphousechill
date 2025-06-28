@@ -74,11 +74,11 @@ var MarketCaps = []MarketCapReq{
 		},
 	},
 	{
-		Label:       "Pebble Time Kickstarte Amount Raised",
+		Label:       "Pebble Time Kickstartre Amount Raised",
 		RefreshRate: 5 * time.Minute,
 		FetchFunc: func() (*MarketCapResp, error) {
 			return &MarketCapResp{
-				Label:     "Pebble Time Kickstarte Amount Raised",
+				Label:     "Pebble Time Kickstarter Amount Raised",
 				Icon:      "",
 				MarketCap: 20338986,
 			}, nil
@@ -89,7 +89,7 @@ var MarketCaps = []MarketCapReq{
 		RefreshRate: 5 * time.Minute,
 		FetchFunc: func() (*MarketCapResp, error) {
 			return &MarketCapResp{
-				Label:     "PNGMI Pandas NFT Collection",
+				Label:     "NGMI Pandas NFT Collection",
 				Icon:      "",
 				MarketCap: 15100,
 			}, nil
@@ -103,28 +103,6 @@ var MarketCaps = []MarketCapReq{
 				Label:     "Hoover Dam Construction Cost",
 				Icon:      "",
 				MarketCap: 49000000, // $49 M
-			}, nil
-		},
-	},
-	{
-		Label:       "Coolest Cooler Kickstarter Amount Raised",
-		RefreshRate: 5 * time.Minute,
-		FetchFunc: func() (*MarketCapResp, error) {
-			return &MarketCapResp{
-				Label:     "Coolest Cooler Kickstarter Amount Raised",
-				Icon:      "",
-				MarketCap: 13000000, // $13 M
-			}, nil
-		},
-	},
-	{
-		Label:       "Flow Hive Kickstarter Amount Raised",
-		RefreshRate: 5 * time.Minute,
-		FetchFunc: func() (*MarketCapResp, error) {
-			return &MarketCapResp{
-				Label:     "Flow Hive Kickstarter Amount Raised",
-				Icon:      "",
-				MarketCap: 12200000, // $12.2 M
 			}, nil
 		},
 	},

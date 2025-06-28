@@ -196,28 +196,29 @@ onMount(() => {
 
       <!-- The rest as cards -->
       <section class="flex flex-col gap-4 w-full max-w-sm sm:max-w-[600px]">
-        {#each cache.slice(1) as entry}
-          <div
-            class="flex rounded-xl px-4 sm:px-6 py-4 text-[1rem] sm:text-[1.1rem] font-semibold shadow-sm text-[#222] text-left items-center overflow-x-auto"
-            class:bg-[#decca7]={entry.item.label === 'Chillhouse'}
-            class:border={entry.item.label === 'Chillhouse'}
-            class:border-[#a05a3b]={entry.item.label === 'Chillhouse'}
-            class:font-bold={entry.item.label === 'Chillhouse'}
-            class:bg-[#f6e7c1]={entry.item.label !== 'Chillhouse'}
-          >
-            <img src={chillhouseCap && entry.item.market_cap > chillhouseCap ? guyNotFlipped : (entry.item.icon || guy)} alt={entry.item.label} class="w-9 h-[46px] mr-3 flex-shrink-0 self-center" />
-            <div class="flex flex-col justify-center min-w-0">
-              <span class="truncate">
-                {entry.item.label}: <span class="text-[#a05a3b] font-bold">{formatCap(entry.item.market_cap)}</span>
-              </span>
-              {#if chillhouseCap && entry.item.market_cap > chillhouseCap}
-                <div class="mt-1 text-[0.95rem] sm:text-[1rem] font-normal">
-                  <span class="text-[#444]">ChillHouse is</span> <span class="text-[#a05a3b] font-bold">{(entry.item.market_cap / chillhouseCap).toFixed(2)}x</span> <span class="text-[#444]">away</span>
-                </div>
-              {/if}
-            </div>
+       {#each cache.slice(1) as entry}
+        <div
+          class="flex flex-wrap rounded-xl px-4 sm:px-6 py-4 text-[1rem] sm:text-[1.1rem] font-semibold shadow-sm text-[#222] text-left items-start"
+          data-lower={entry.item.label.toLowerCase()}
+        >
+          <img
+            src={chillhouseCap && entry.item.market_cap > chillhouseCap
+              ? guyNotFlipped
+              : (entry.item.icon || guy)}
+            alt={entry.item.label}
+            class="w-9 h-[46px] mr-3 flex-shrink-0"
+          />
+          <div class="flex-1 flex flex-wrap justify-between gap-2">
+            <span class="whitespace-normal break-words flex-1">
+              {entry.item.label}
+            </span>
+            <span class="font-bold text-[#a05a3b] flex-shrink-0">
+              {formatCap(entry.item.market_cap)}
+            </span>
           </div>
-        {/each}
+        </div>
+      {/each}
+
       </section>
     {:else}
       <section class="flex items-start justify-center my-8 w-full max-w-md sm:max-w-[700px]">
