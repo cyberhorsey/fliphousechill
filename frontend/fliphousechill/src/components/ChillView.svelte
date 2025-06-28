@@ -9,14 +9,45 @@
   import 'swiper/css';
   import 'swiper/css/effect-cards';
 
+  let swiperEl;
+
   function highlightText(text) {
     return text
       .replace(/(flipped)/gi, '<span class="highlight">$1</span>')
       .replace(/(opening weekend)/gi, '<span class="highlight">$1</span>');
   }
 
+  function handleKeydown(e) {
+    if (!swiperEl) return;
+    const swiper = swiperEl.swiper;
+    if (!swiper) return;
+    if (e.key === 'ArrowLeft') {
+      swiper.slidePrev();
+      e.preventDefault();
+    } else if (e.key === 'ArrowRight') {
+      swiper.slideNext();
+      e.preventDefault();
+    }
+  }
+
   onMount(() => {
     register();
+    if (swiperEl) {
+      swiperEl.params = {
+        ...swiperEl.params,
+        keyboard: {
+          enabled: true,
+          onlyInViewport: true,
+          pageUpDown: true
+        }
+      };
+      swiperEl.addEventListener('swiperinit', () => {
+        if (swiperEl.swiper && swiperEl.swiper.keyboard) {
+          swiperEl.swiper.keyboard.enable();
+        }
+      });
+      swiperEl.focus();
+    }
   });
 </script>
 
@@ -24,6 +55,9 @@
   <swiper-container
     effect="cards"
     grab-cursor="true"
+    tabindex="0"
+    bind:this={swiperEl}
+    on:keydown={handleKeydown}
     class="w-full max-w-xs sm:w-[340px] sm:h-[420px] mx-auto"
     style="height: 360px;"
   >
@@ -85,5 +119,13 @@
   .highlight {
     color: #a05a3b;
     font-weight: bold;
+  }
+  swiper-container:focus {
+    outline: none !important;
+    box-shadow: none !important;
+  }
+  swiper-slide:focus {
+    outline: none !important;
+    box-shadow: none !important;
   }
 </style> 

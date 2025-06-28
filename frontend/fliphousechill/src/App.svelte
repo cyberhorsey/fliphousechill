@@ -49,17 +49,6 @@
 
   fetchCache();
 
-   // whenever loading goes false, scroll to our ChillHouse card
- $: if (!loading) {
-   // wait for DOM to update
-   tick().then(() => {
-     const el = document.querySelector('[data-lower="chillhouse"]');
-     if (el) {
-       el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-     }
-   });
- }
-
 function formatCap(val) {
   if (val >= 1e9) {
     return (val / 1e9)
@@ -116,7 +105,7 @@ onMount(() => {
   </button>
 {/if}
 
-<main class="min-h-screen bg-[#e3cba4] flex flex-col items-center px-2 sm:px-4 pb-8 w-full overflow-x-hidden">
+<main class="min-h-screen bg-[#e3cba4] flex flex-col items-center px-2 sm:px-4 pb-8 w-full sm:overflow-x-visible overflow-x-hidden">
   <header class="flex flex-col items-center mt-8 mb-2 w-full max-w-md sm:max-w-2xl">
     <div class="flex flex-row items-center justify-center mb-2 w-full">
       <img src={guyNotFlipped} alt="Chillhouse Guy Not Flipped" class="mr-1" style="max-width: 24px;" />
@@ -208,13 +197,18 @@ onMount(() => {
             alt={entry.item.label}
             class="w-9 h-[46px] mr-3 flex-shrink-0"
           />
-          <div class="flex-1 flex flex-wrap justify-between gap-2">
-            <span class="whitespace-normal break-words flex-1">
-              {entry.item.label}
-            </span>
-            <span class="font-bold text-[#a05a3b] flex-shrink-0">
-              {formatCap(entry.item.market_cap)}
-            </span>
+          <div class="flex-1 flex flex-col justify-between gap-1">
+            <div class="flex flex-row justify-between items-center w-full">
+              <span class="whitespace-normal break-words flex-1">
+                {entry.item.label}
+              </span>
+              <span class="font-bold text-[#a05a3b] flex-shrink-0">
+                {formatCap(entry.item.market_cap)}
+              </span>
+            </div>
+            {#if chillhouseCap && entry.item.market_cap > chillhouseCap}
+              <span class="text-xs text-[#a05a3b] font-bold block">Chillhouse is {(entry.item.market_cap / chillhouseCap).toFixed(2)}x away</span>
+            {/if}
           </div>
         </div>
       {/each}
