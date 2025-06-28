@@ -52,7 +52,8 @@ func (c *Cache) Set(key string, item marketcaps.MarketCapResp) {
 	}
 }
 
-func (c *Cache) All() []CacheItem {
+// AllSortedByMarketCap returns all items sorted by market cap in descending order.
+func (c *Cache) AllSortedByMarketCap() []CacheItem {
 	c.mutex.Lock()
 	defer c.mutex.Unlock()
 
@@ -63,5 +64,15 @@ func (c *Cache) All() []CacheItem {
 			CachedAt: v.CachedAt,
 		})
 	}
+
+	// sort by market cap
+	for i := 0; i < len(copy)-1; i++ {
+		for j := i + 1; j < len(copy); j++ {
+			if copy[i].Item.MarketCap < copy[j].Item.MarketCap {
+				copy[i], copy[j] = copy[j], copy[i]
+			}
+		}
+	}
+
 	return copy
 }

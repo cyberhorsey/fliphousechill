@@ -2,6 +2,7 @@
   import "@fontsource/days-one";
   import logo from "/public/fliphousechill-logo.png";
   import guy from "/public/chillhouse-guy.png";
+   import { tick } from 'svelte';
 
   let cache = [];
   let loading = true;
@@ -27,16 +28,36 @@
 
   fetchCache();
 
-  function formatCap(val) {
-    if (val >= 1e9) {
-      return (val / 1e9)
-        .toFixed(1)
-        .replace(/\.0$/, '') + 'b';
-    }
+   // whenever loading goes false, scroll to our ChillHouse card
+ $: if (!loading) {
+   // wait for DOM to update
+   tick().then(() => {
+     const el = document.querySelector('[data-lower="chillhouse"]');
+     if (el) {
+       el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+     }
+   });
+ }
+
+function formatCap(val) {
+  if (val >= 1e9) {
+    return (val / 1e9)
+      .toFixed(1)
+      .replace(/\.0$/, '') + 'b';
+  }
+  if (val >= 1e6) {
     return (val / 1e6)
       .toFixed(1)
       .replace(/\.0$/, '') + 'm';
   }
+  if (val >= 1e3) {
+    return (val / 1e3)
+      .toFixed(1)
+      .replace(/\.0$/, '') + 'k';
+  }
+  return val.toString();
+}
+
 </script>
 
 <main class="min-h-screen bg-[#e3cba4] flex flex-col items-center px-4 pb-8">
@@ -80,6 +101,7 @@
       {#each cache.slice(1) as entry}
         <div
           class="flex items-center rounded-xl px-6 py-4 text-[1.1rem] font-semibold shadow-sm bg-[#f6e7c1] text-[#222] text-left"
+          data-lower={entry.item.label.toLowerCase()}
         >
           <img src={entry.item.icon || guy} alt={entry.item.label} class="w-9 h-[46px] mr-3" />
           <span>
