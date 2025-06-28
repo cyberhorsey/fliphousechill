@@ -311,7 +311,7 @@ var MarketCaps = []MarketCapReq{
 			return &MarketCapResp{
 				Label:     "Doritos Locos Tacos Launch Day Sales",
 				Icon:      "",
-				MarketCap: 15300000,
+				MarketCap: 15700000,
 			}, nil
 		},
 	},
@@ -327,13 +327,57 @@ var MarketCaps = []MarketCapReq{
 		},
 	},
 	{
-		Label:       "Starman Tesla Car Insurance Estimate",
+		Label:       "Unicorn Frappuccino Day-1 Sales",
 		RefreshRate: 5 * time.Minute,
 		FetchFunc: func() (*MarketCapResp, error) {
 			return &MarketCapResp{
-				Label:     "Starman Tesla Car Insurance Estimate",
+				Label:     "Unicorn Frappuccino Day-1 Sales",
 				Icon:      "",
-				MarketCap: 15700000, // $15 M
+				MarketCap: 17000000, // $17 M
+			}, nil
+		},
+	},
+	{
+		Label:       "Chernobyl Miniseries Budget",
+		RefreshRate: 5 * time.Minute,
+		FetchFunc: func() (*MarketCapResp, error) {
+			return &MarketCapResp{
+				Label:     "Chernobyl Miniseries Budget",
+				Icon:      "",
+				MarketCap: 18000000, // $18 M
+			}, nil
+		},
+	},
+	{
+		Label:       "Budget for Moon Cheese Research",
+		RefreshRate: 5 * time.Minute,
+		FetchFunc: func() (*MarketCapResp, error) {
+			return &MarketCapResp{
+				Label:     "Budget for Moon Cheese Research",
+				Icon:      "",
+				MarketCap: 18000000, // $18 M
+			}, nil
+		},
+	},
+	{
+		Label:       "Vancouver Birthday Clown Subsidies",
+		RefreshRate: 5 * time.Minute,
+		FetchFunc: func() (*MarketCapResp, error) {
+			return &MarketCapResp{
+				Label:     "Vancouver Birthday Clown Subsidies",
+				Icon:      "",
+				MarketCap: 17500000, // $17.5 M
+			}, nil
+		},
+	},
+	{
+		Label:       "Unicorn Statue Construction in Vegas",
+		RefreshRate: 5 * time.Minute,
+		FetchFunc: func() (*MarketCapResp, error) {
+			return &MarketCapResp{
+				Label:     "Unicorn Statue Construction in Vegas",
+				Icon:      "",
+				MarketCap: 17800000, // $17.8 M
 			}, nil
 		},
 	},
