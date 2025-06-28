@@ -18,6 +18,7 @@
   let chillhouseEntry = null;
   let chillAudio;
   let muted = false;
+  let totalSupply = 1_000_000_000; // 1 billion tokens
   $: if (chillAudio) chillAudio.muted = muted;
 
   async function fetchCache() {
@@ -85,6 +86,11 @@ function highlightText(text) {
     .replace(/(opening weekend)/gi, '<span class="highlight">$1</span>');
 }
 
+function calculateChillhousePriceFromCap(marketCap) {
+  if (!marketCap) return null;
+  return marketCap / totalSupply;
+}
+
 onMount(() => {
   register();
 });
@@ -122,7 +128,7 @@ onMount(() => {
     {#if chillhouseCap}
       <div class="flex flex-row flex-wrap items-center justify-center gap-2 sm:gap-4 text-sm font-medium text-[#444] mt-1 w-full">
         <span>MC: <span class="text-[#222]">{formatCap(chillhouseCap).toUpperCase()}</span></span>
-        <span>Price: <span class="text-[#222]">${chillhouseEntry && chillhouseEntry.item.price ? chillhouseEntry.item.price : '0.016'}</span></span>
+        <span>Price: <span class="text-[#222]">${chillhouseEntry && chillhouseEntry.item.price ? chillhouseEntry.item.price : (chillhouseCap ? calculateChillhousePriceFromCap(chillhouseCap).toFixed(3) : '0.016')}</span></span>
         <a
           href="https://dexscreener.com/solana/35tqqmeirwebk6fr5qipwastuaavo32vjnuljpxvsxuk"
           target="_blank"
