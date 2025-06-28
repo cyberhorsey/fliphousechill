@@ -3,6 +3,11 @@
   import logo from "/public/fliphousechill-logo.png";
   import guy from "/public/chillhouse-guy.png";
   import guyNotFlipped from "/public/chillhouse-guy-not-flipped.png";
+  import { onMount } from 'svelte';
+  import { register } from 'swiper/element/bundle';
+  import 'swiper/css';
+  import 'swiper/css/effect-cards';
+  import ChillView from './components/ChillView.svelte';
 
   let cache = [];
   let loading = true;
@@ -50,6 +55,17 @@
       .toFixed(1)
       .replace(/\.0$/, '') + 'm';
   }
+
+  function highlightText(text) {
+    // Simple demo: highlight 'flipped' and 'opening weekend' in brown
+    return text
+      .replace(/(flipped)/gi, '<span class="highlight">$1</span>')
+      .replace(/(opening weekend)/gi, '<span class="highlight">$1</span>');
+  }
+
+  onMount(() => {
+    register();
+  });
 </script>
 
 <main class="min-h-screen bg-[#e3cba4] flex flex-col items-center px-4 pb-8">
@@ -166,10 +182,16 @@
       </section>
     {/if}
   {:else}
-    <!-- Chill View Placeholder -->
-    <section class="flex flex-col items-center justify-center w-full max-w-[700px] my-8">
-      <h2 class="text-[1.5rem] font-bold text-[#a05a3b]">Chill View</h2>
-      <p class="text-[#444] mt-2">This is the Chill View. Add your custom content here!</p>
+    <!-- Chill View with Swiper -->
+    <section class="flex flex-col items-center justify-center w-full max-w-[700px] my-4">
+    
+      {#if !loading && cache.length}
+        <ChillView {cache} {chillhouseCap} {formatCap} />
+      {:else if loading}
+        <p class="text-[#444] mt-2">Loading Chill View...</p>
+      {:else}
+        <p class="text-[#444] mt-2">No entries to show.</p>
+      {/if}
     </section>
   {/if}
 </main>
@@ -189,5 +211,42 @@
     h1 {
       font-size: 1.4rem !important;
     }
+  }
+  .swiper-container {
+    width: 340px;
+    height: 420px;
+    margin: 0 auto;
+  }
+  .chill-card {
+    background: #f6e7c1;
+    border-radius: 18px;
+    box-shadow: 0 2px 8px rgba(160,90,59,0.08);
+    padding: 2.5rem 2rem 1.5rem 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: flex-start;
+    min-height: 340px;
+    position: relative;
+    overflow: hidden;
+  }
+  .chill-card-content {
+    width: 100%;
+    z-index: 2;
+  }
+  .chill-card-text {
+    text-align: left;
+    word-break: break-word;
+  }
+  .chill-card-guy {
+    width: 48px;
+    position: absolute;
+    left: 1.5rem;
+    top: 1.2rem;
+    z-index: 1;
+  }
+  .highlight {
+    color: #a05a3b;
+    font-weight: bold;
   }
 </style>
