@@ -2,9 +2,14 @@
   import "@fontsource/days-one";
   import logo from "/public/fliphousechill-logo.png";
   import guy from "/public/chillhouse-guy.png";
+  import guyNotFlipped from "/public/chillhouse-guy-not-flipped.png";
 
   let cache = [];
   let loading = true;
+  let chillhouseCap = null;
+  let etcCap = null;
+  let chillhouseToEtcX = null;
+
   async function fetchCache() {
     try {
       const response = await fetch('https://chillhouse-api-zaydoupxua-uw.a.run.app/cache', {
@@ -18,6 +23,12 @@
       }
       const data = await response.json();
       cache = data;
+      // Find Chillhouse and Ethereum Classic entries
+      const chillhouseEntry = cache.find(e => e.item.label && e.item.label.toLowerCase().includes('chillhouse'));
+      const etcEntry = cache.find(e => e.item.label && e.item.label.toLowerCase().includes('ethereum classic'));
+      chillhouseCap = chillhouseEntry ? chillhouseEntry.item.market_cap : null;
+      etcCap = etcEntry ? etcEntry.item.market_cap : null;
+      chillhouseToEtcX = (chillhouseCap && etcCap) ? (etcCap / chillhouseCap) : null;
     } catch (error) {
       console.error('Error fetching cache:', error);
     } finally {
@@ -72,6 +83,11 @@
         <h1 class="text-[1.5rem] font-bold text-[#222] leading-tight m-0">
           {cache[0].item.label} <span class="text-[#a05a3b] font-bold">market cap</span> is <span class="text-[#a05a3b] font-bold">{formatCap(cache[0].item.market_cap)}</span>
         </h1>
+        {#if chillhouseToEtcX}
+          <div class="mt-2 text-[1.1rem] text-[#444]">
+            Chillhouse needs to do <span class="font-bold text-[#a05a3b]">{chillhouseToEtcX.toFixed(2)}x</span> to flip Ethereum Classic market cap.
+          </div>
+        {/if}
       </div>
     </section>
 
@@ -79,17 +95,24 @@
     <section class="flex flex-col gap-4 w-full max-w-[600px]">
       {#each cache.slice(1) as entry}
         <div
-          class="flex items-center rounded-xl px-6 py-4 text-[1.1rem] font-semibold shadow-sm text-[#222] text-left"
+          class="flex rounded-xl px-6 py-4 text-[1.1rem] font-semibold shadow-sm text-[#222] text-left items-center"
           class:bg-[#decca7]={entry.item.label === 'Chillhouse'}
           class:border={entry.item.label === 'Chillhouse'}
           class:border-[#a05a3b]={entry.item.label === 'Chillhouse'}
           class:font-bold={entry.item.label === 'Chillhouse'}
           class:bg-[#f6e7c1]={entry.item.label !== 'Chillhouse'}
         >
-          <img src={entry.item.icon || guy} alt={entry.item.label} class="w-9 h-[46px] mr-3" />
-          <span>
-            {entry.item.label}: <span class="text-[#a05a3b] font-bold">{formatCap(entry.item.market_cap)}</span>
-          </span>
+          <img src={chillhouseCap && entry.item.market_cap > chillhouseCap ? guyNotFlipped : (entry.item.icon || guy)} alt={entry.item.label} class="w-9 h-[46px] mr-3 flex-shrink-0 self-center" />
+          <div class="flex flex-col justify-center">
+            <span>
+              {entry.item.label}: <span class="text-[#a05a3b] font-bold">{formatCap(entry.item.market_cap)}</span>
+            </span>
+            {#if chillhouseCap && entry.item.market_cap > chillhouseCap}
+              <div class="mt-1 text-[1rem] font-normal">
+                <span class="text-[#444]">ChillHouse is</span> <span class="text-[#a05a3b] font-bold">{(entry.item.market_cap / chillhouseCap).toFixed(2)}x</span> <span class="text-[#444]">away</span>
+              </div>
+            {/if}
+          </div>
         </div>
       {/each}
     </section>
