@@ -1,10 +1,10 @@
 <script>
-  import svelteLogo from './assets/svelte.svg'
-  import viteLogo from '/vite.svg'
+  import "@fontsource/days-one";
+  import logo from "/public/fliphousechill-logo.png";
+  import guy from "/public/chillhouse-guy.png";
 
-  // fetch https://chillhouse-api-zaydoupxua-uw.a.run.app/cache and store it
-  // in a variable called cache
   let cache = [];
+  let loading = true;
   async function fetchCache() {
     try {
       const response = await fetch('https://chillhouse-api-zaydoupxua-uw.a.run.app/cache', {
@@ -12,21 +12,21 @@
         headers: {
           'Content-Type': 'application/json',
         },
-      })
+      });
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`)
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
-      const data = await response.json()
-      cache = data
-      console.log('Cache fetched successfully:', cache)
+      const data = await response.json();
+      cache = data;
     } catch (error) {
-      console.error('Error fetching cache:', error)
+      console.error('Error fetching cache:', error);
+    } finally {
+      loading = false;
     }
   }
 
-  fetchCache()
-  
-   // format a float as "23.5m" or "1.2b"
+  fetchCache();
+
   function formatCap(val) {
     if (val >= 1e9) {
       return (val / 1e9)
@@ -37,65 +37,83 @@
       .toFixed(1)
       .replace(/\.0$/, '') + 'm';
   }
-
 </script>
 
-<main>
-  <div>
-    <a href="https://vite.dev" target="_blank" rel="noreferrer">
-      <img src={viteLogo} class="logo" alt="Vite Logo" />
-    </a>
-    <a href="https://svelte.dev" target="_blank" rel="noreferrer">
-      <img src={svelteLogo} class="logo svelte" alt="Svelte Logo" />
-    </a>
-  </div>
-  <h1>Vite + Svelte</h1>
+<main class="min-h-screen bg-[#e3cba4] flex flex-col items-center px-4 pb-8">
+  <header class="flex flex-col items-center mt-8">
+    <div class="font-bold text-[1.5rem] mb-2 tracking-wide">
+      <span class="text-[#a05a3b]">Flip</span><span class="text-[#444]"
+        >House</span
+      ><span class="text-[#444]">Chill</span>
+    </div>
+    <img src={logo} alt="FlipHouseChill Logo" class="w-[70px] mb-2 spin-180-hover" />
+  </header>
 
+  {#if loading}
+    <section class="flex items-start justify-center my-8 w-full max-w-[700px]">
+      <img src={guy} alt="Chillhouse Guy" class="w-14 h-[71px] mr-4" />
+      <div class="flex-1 text-left">
+        <h1 class="text-[1.5rem] font-bold text-[#222] leading-tight m-0">
+          Loading latest entry...
+        </h1>
+      </div>
+    </section>
+    <section class="flex flex-col gap-4 w-full max-w-[600px]">
+      <div class="flex items-center rounded-xl px-6 py-4 text-[1.1rem] font-semibold shadow-sm bg-[#f6e7c1] text-[#222] text-left">
+        <img src={guy} alt="Chillhouse Guy" class="w-9 h-[46px] mr-3" />
+        <span>Loading entries...</span>
+      </div>
+    </section>
+  {:else if cache.length}
+    <!-- Latest entry as headline -->
+    <section class="flex items-start justify-center my-8 w-full max-w-[700px]">
+      <img src={cache[0].item.icon || guy} alt={cache[0].item.label} class="w-14 h-[71px] mr-4" />
+      <div class="flex-1 text-left">
+        <h1 class="text-[1.5rem] font-bold text-[#222] leading-tight m-0">
+          {cache[0].item.label} <span class="text-[#a05a3b] font-bold">market cap</span> is <span class="text-[#a05a3b] font-bold">{formatCap(cache[0].item.market_cap)}</span>
+        </h1>
+      </div>
+    </section>
 
-  <div class="card">
-    {#if cache.length}
-      <h2>Cache Data</h2>
-      {#each cache as entry (entry.item.label)}
-        <div class="cache-entry">
-          {#if entry.item.icon}
-            <img src={entry.item.icon} alt={entry.item.label} width="24" height="24" />
-          {/if}
-          {#if entry.item.label.toLowerCase() == "chillhouse"}
-          <strong>{entry.item.label}:</strong>
-          {:else}
-          <span>{entry.item.label}:</span>
-          {/if}
-          <span>{formatCap(entry.item.market_cap)}</span>
+    <!-- The rest as cards -->
+    <section class="flex flex-col gap-4 w-full max-w-[600px]">
+      {#each cache.slice(1) as entry}
+        <div
+          class="flex items-center rounded-xl px-6 py-4 text-[1.1rem] font-semibold shadow-sm bg-[#f6e7c1] text-[#222] text-left"
+        >
+          <img src={entry.item.icon || guy} alt={entry.item.label} class="w-9 h-[46px] mr-3" />
+          <span>
+            {entry.item.label}: <span class="text-[#a05a3b] font-bold">{formatCap(entry.item.market_cap)}</span>
+          </span>
         </div>
       {/each}
-    {:else}
-      <p>Loading cache...</p>
-    {/if}
-  </div>
-
-  <p>
-    Check out <a href="https://github.com/sveltejs/kit#readme" target="_blank" rel="noreferrer">SvelteKit</a>, the official Svelte app framework powered by Vite!
-  </p>
-
-  <p class="read-the-docs">
-    Click on the Vite and Svelte logos to learn more
-  </p>
+    </section>
+  {:else}
+    <section class="flex items-start justify-center my-8 w-full max-w-[700px]">
+      <img src={guy} alt="Chillhouse Guy" class="w-14 h-[71px] mr-4" />
+      <div class="flex-1 text-left">
+        <h1 class="text-[1.5rem] font-bold text-[#222] leading-tight m-0">
+          No entries found.
+        </h1>
+      </div>
+    </section>
+  {/if}
 </main>
 
 <style>
-  .logo {
-    height: 6em;
-    padding: 1.5em;
-    will-change: filter;
-    transition: filter 300ms;
+  :global(.spin-180-hover:hover) {
+    transition: transform 0.5s cubic-bezier(0.4,0,0.2,1);
+    transform: rotate(180deg);
   }
-  .logo:hover {
-    filter: drop-shadow(0 0 2em #646cffaa);
+  :global(.spin-180-hover) {
+    transition: transform 0.5s cubic-bezier(0.4,0,0.2,1);
   }
-  .logo.svelte:hover {
-    filter: drop-shadow(0 0 2em #ff3e00aa);
+  :global(body) {
+    background-color: #e3cba4;
   }
-  .read-the-docs {
-    color: #888;
+  @media (max-width: 600px) {
+    h1 {
+      font-size: 1.4rem !important;
+    }
   }
 </style>
