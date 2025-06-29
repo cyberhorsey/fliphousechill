@@ -91,18 +91,25 @@ onMount(() => {
   <div class="gradient-blob bottom-left"></div>
   <div class="gradient-blob bottom-right"></div>
   <audio src="/chillhouse-beats.mp3" autoplay loop style="display:none" bind:this={chillAudio} {muted} />
-  <button
-    class="fixed sound-button bottom-6 right-6 z-20 bg-white border border-[#a05a3b] rounded-xl shadow-md p-2 flex items-center justify-center transition hover:scale-110 outline-none focus:outline-none focus:ring-0 focus:shadow-none"
-    on:click={() => muted = !muted}
-    aria-label={muted ? 'Unmute music' : 'Mute music'}
-    style="width: 54px; height: 54px; outline: none; box-shadow: none;"
-  >
-    {#if muted}
-      <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="#a05a3b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="1" y1="1" x2="23" y2="23"></line><path d="M9 9v3a3 3 0 0 0 5.12 2.12M15 9.34V4a3 3 0 0 0-5.94-.6"></path><path d="M17 16.95A7 7 0 0 1 5 12v-2m14 0v2a7 7 0 0 1-.11 1.23"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg>
-    {:else}
-      <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="#a05a3b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg>
-    {/if}
-  </button>
+  <div class="fixed bottom-6 right-6 z-30 flex items-center gap-2">
+    <button
+      class="sound-button bg-white border border-[#a05a3b] rounded-xl shadow-md p-2 flex items-center justify-center transition hover:scale-110 outline-none focus:outline-none focus:ring-0 focus:shadow-none"
+      on:click={() => muted = !muted}
+      aria-label={muted ? 'Unmute music' : 'Mute music'}
+      style="width: 54px; height: 54px; outline: none; box-shadow: none;"
+    >
+      {#if muted}
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M17.25 9.75L19.5 12M19.5 12L21.75 14.25M19.5 12L21.75 9.75M19.5 12L17.25 14.25M6.75 8.25L11.47 3.53C11.5749 3.42524 11.7085 3.35392 11.8539 3.32503C11.9993 3.29615 12.15 3.311 12.2869 3.36771C12.4239 3.42442 12.541 3.52045 12.6234 3.64367C12.7058 3.76688 12.7499 3.91176 12.75 4.06V19.94C12.7499 20.0882 12.7058 20.2331 12.6234 20.3563C12.541 20.4795 12.4239 20.5756 12.2869 20.6323C12.15 20.689 11.9993 20.7038 11.8539 20.675C11.7085 20.6461 11.5749 20.5748 11.47 20.47L6.75 15.75H4.51C3.63 15.75 2.806 15.243 2.572 14.396C2.35751 13.6154 2.2492 12.8095 2.25 12C2.25 11.17 2.362 10.367 2.572 9.604C2.806 8.756 3.63 8.25 4.51 8.25H6.75Z" stroke="#954E35" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      {:else}
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M19.114 5.636C19.9497 6.47173 20.6127 7.46388 21.065 8.55582C21.5173 9.64776 21.7501 10.8181 21.7501 12C21.7501 13.1819 21.5173 14.3522 21.065 15.4442C20.6127 16.5361 19.9497 17.5283 19.114 18.364M16.463 8.288C17.4474 9.27254 18.0004 10.6078 18.0004 12C18.0004 13.3922 17.4474 14.7275 16.463 15.712M6.75 8.25L11.47 3.53C11.5749 3.42524 11.7085 3.35392 11.8539 3.32503C11.9993 3.29615 12.15 3.311 12.2869 3.36771C12.4239 3.42442 12.541 3.52045 12.6234 3.64367C12.7058 3.76688 12.7499 3.91176 12.75 4.06V19.94C12.7499 20.0882 12.7058 20.2331 12.6234 20.3563C12.541 20.4795 12.4239 20.5756 12.2869 20.6323C12.15 20.689 11.9993 20.7038 11.8539 20.675C11.7085 20.6461 11.5749 20.5748 11.47 20.47L6.75 15.75H4.51C3.63 15.75 2.806 15.243 2.572 14.396C2.35751 13.6154 2.2492 12.8095 2.25 12C2.25 11.17 2.362 10.367 2.572 9.604C2.806 8.756 3.63 8.25 4.51 8.25H6.75Z" stroke="#954E35" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      {/if}
+    </button>
+    <img src="/chillhousevibe.gif" alt="Chillhouse Vibe" class="w-14 h-14 rounded-xl object-cover" style="margin-left: 0.5rem;" />
+  </div>
 {/if}
 
 <main class="min-h-screen bg-[#e3cba4] flex flex-col items-center px-2 sm:px-4 pb-8 w-full sm:overflow-x-visible overflow-x-hidden">
